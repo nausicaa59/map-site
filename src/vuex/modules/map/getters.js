@@ -4,4 +4,6 @@ export default {
 	mapY 				:	state => state.map.y,
 	searchCurrent 		:	state => state.search.current,
 	searchProposition	:	state => state.search.proposition,
+	selection			:	state => state.selection,
+	displaySelection	:	state => state.displaySelection,
 }

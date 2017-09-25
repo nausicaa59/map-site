@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="titre">
-            La carte du <span>18-25</span>
+            La carte du <span>forum</span>
         </div>
         <div class="input-group actions-bar">
           <span class="input-group-btn" id="menuBtn" v-on:click="openMenu()">
@@ -40,11 +40,13 @@ export default {
             "searchByFragmentPseudo"
         ]),
         ...mapMutations("menu", [
-            "setDisplayMenu"
+            "setDisplayMenu"            
         ]),
         ...mapMutations("map", [
             "setSearchCurrent",
-            "setSearchProposition"
+            "setSearchProposition",
+            "setSelection",
+            "setDisplaySelection"
         ]),
         ...mapGetters("map", [
             "searchProposition",
@@ -58,7 +60,8 @@ export default {
             this.setSearchProposition([]);
         },
         selection: function(val) {
-            console.log(val);
+            this.setSelection(val);
+            this.setDisplaySelection(true);
         }
     },
     computed: {

@@ -21,7 +21,7 @@ export const searchByFragmentPseudo = ({ commit, getters }) => {
 		});
 	}
 
-	if(recherche.length > 3)
+	if(recherche.length > 2)
 	{
 		commit("setSearchProposition", items);
 	}

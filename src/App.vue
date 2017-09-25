@@ -2,6 +2,7 @@
   <div id="app">
     <barre-action-general></barre-action-general>
     <menu-general></menu-general>
+    <pseudo-details></pseudo-details>
     <map-forum></map-forum>
   </div>
 </template>
@@ -10,13 +11,17 @@
 import MapForum from './components/Mapforum'
 import MenuGeneral from './components/MenuGeneral'
 import BarreActionGeneral from './components/BarreActionGeneral'
+import PseudoDetails from './components/PseudoDetails'
+
+
 
 export default {
   name: 'app',
   components: {
     MapForum,
     MenuGeneral,
-    BarreActionGeneral
+    BarreActionGeneral,
+    PseudoDetails
   }
 }
 

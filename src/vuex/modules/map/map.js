@@ -16,7 +16,8 @@ const state = {
   		current : "",
   		proposition : []
   	},
-  	selection : {}
+  	selection : undefined,
+  	displaySelection : false,
 }
 
 export default {

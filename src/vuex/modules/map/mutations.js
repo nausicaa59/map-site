@@ -14,4 +14,18 @@ export const mutations = {
 	setSearchProposition: (state, vals) => {
 	    state.search.proposition = vals;
 	},
+	setSelection: (state, vals) => {
+	    state.search.proposition.forEach(function(item){
+	    	if(item.id == vals)
+	    	{
+	    		state.selection = item;
+	    	}
+	    });
+
+	    state.search.proposition = [];
+	},
+	setDisplaySelection: (state, vals) => {
+	    state.displaySelection = vals;
+	    console.log(state.displaySelection);
+	},
 }
