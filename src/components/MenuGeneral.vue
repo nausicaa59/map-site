@@ -80,8 +80,8 @@ export default {
             height: 100%;
             top:0px;
             left: 0px;
-            background-color: @bleu_fonce;
-            opacity: 0.3;
+            background-color: black;
+            opacity: 0.6;
         }
 
         .items
