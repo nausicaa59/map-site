@@ -16,7 +16,7 @@
             <div class="item" v-for="proposition in this.searchProposition()">
                 <div class="row" v-on:click="selection(proposition.id)">
                     <div class="col-md-5 col-7 pseudo">
-                        {{proposition.pseudo}}
+                        {{proposition.id}} - {{proposition.pseudo}}
                     </div>
                     <div class="col-md-5 col-3 infos">
                         <i class="fa fa-commenting-o" aria-hidden="true"></i>: {{proposition.nb_messages}}
@@ -58,6 +58,7 @@ export default {
         cleanSearch: function(e) {
             this.setSearchCurrent("");
             this.setSearchProposition([]);
+            this.setDisplaySelection(false);
         },
         selection: function(val) {
             this.setSelection(val);

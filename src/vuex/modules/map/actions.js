@@ -15,9 +15,25 @@ export const searchByFragmentPseudo = ({ commit, getters }) => {
 			"img_lien" : "Nausicaa" + i,
 			"nb_relation" : "Nausicaa" + i,
 			"banni" : "Nausicaa" + i,
-			"date_inscription" : "Nausicaa" + i,
+			"date_inscription" : "2017-01-01",
 			"coord_X" : 1200 + i*10,
 			"coord_Y" : 1000 + i,
+			"similaires" : [
+				{"pseudo" : "Nausicaa61", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa59", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa58", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa57", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa56", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa51", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "_Nausicaa_", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa61", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa61", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa59", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa58", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa57", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa56", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+				{"pseudo" : "Nausicaa51", "id": 1450, "pourc": 0.99, "img_lien" : "https://unsplash.it/200/200"},
+			]
 		});
 	}
 

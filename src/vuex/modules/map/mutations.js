@@ -15,17 +15,19 @@ export const mutations = {
 	    state.search.proposition = vals;
 	},
 	setSelection: (state, vals) => {
-	    state.search.proposition.forEach(function(item){
-	    	if(item.id == vals)
+		state.displaySelection = false;
+		for(var i=0; i<state.search.proposition.length; i++)
+		{
+	    	if(state.search.proposition[i].id == vals)
 	    	{
-	    		state.selection = item;
+	    		state.selection = state.search.proposition[i];
 	    	}
-	    });
+		}
 
+		state.displaySelection = true;
 	    state.search.proposition = [];
 	},
 	setDisplaySelection: (state, vals) => {
 	    state.displaySelection = vals;
-	    console.log(state.displaySelection);
 	},
 }
