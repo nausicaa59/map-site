@@ -1,50 +1,26 @@
 <template>
     <div id="pseudo-details" v-if="this.displaySelection()">
         <div class="items">
-            <div class="closebt" id="closeMenu" v-on:click="close()">
-                <i class="fa fa-window-close" aria-hidden="true"></i>
-            </div>
-            <div class="infos">
+            <div class="infos" v-if="this.selection() != undefined">
                 <div class="row section-info">
                     <div class="col-md-4 col-3 avatar">
-                        <img src="https://unsplash.it/200/200">
+                        <img :src="this.selection().img_lien">
                     </div>
                     <div class="col-md-8 col-9 details">
                         <span class="pseudo">{{this.selection().pseudo}}</span>
                         <br><span class="badge badge-primary">Msg : {{this.selection().nb_messages}}</span>
                         <span class="badge badge-primary">Sujets : {{this.selection().nb_messages}}</span> 
-                        <br>Crée le : {{this.selection().date_inscription}}
+                        <br><br>Crée le : {{this.selection().date_inscription}}
                     </div>
                 </div>
-                <div class="row section-info cloud-tag">
-                    <div class="col-md-12 col-12">
-                        <div class="label">Nuage de mots :</div>
-                        <div class="cloud">
-                            <ul>
-                                <li>Paris (15)</li>
-                                <li>Je (5)</li>
-                                <li>Fille (3)</li>
-                                <li>Macron (2)</li>
-                                <li>Musique (1)</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="section-plus">
+                    <h2 v-on:click="goStat()"><i class="fa fa-area-chart" aria-hidden="true"></i>Voir les statistiques</h2>
                 </div>
-                <div class="row section-info pseudo-similaire">
-                    <div class="col-md-12 col-12">
-                        <div class="label">Pseudo similaire :</div>
-                        <div class="row item"  v-for="similaire in this.selection().similaires">
-                            <div class="col-md-3 col-4">
-                                <img :src="similaire.img_lien">                           
-                            </div>
-                            <div class="col-md-5 col-6">
-                                {{similaire.pseudo}}                            
-                            </div>
-                            <div class="col-md-4 col-2">
-                                {{similaire.pourc}}                            
-                            </div>
-                        </div>                        
-                    </div>
+                <div class="section-plus">
+                    <h2><i class="fa fa-user" aria-hidden="true"></i>Voir les pseudos similaires</h2>
+                </div>
+                <div class="section-plus">
+                    <h2><i class="fa fa-random" aria-hidden="true"></i>Voir un pseudo au hasard</h2>
                 </div>
             </div>
         </div>
@@ -73,11 +49,8 @@ export default {
             "selection",
             "displaySelection",
         ]),
-        close: function(e) {
-            this.setDisplaySelection(false);
-        },
-        scrollHanle(evt) {
-          console.log("scrool",evt)
+        goStat : function(){
+            this.$router.push({ name: 'statpseudo'});
         }
     },
 }
@@ -132,7 +105,7 @@ export default {
             width: 100%;
             height: 100%;
             background-color: @bleu_fonce;
-            padding:150px 22px 10px 22px;
+            padding:170px 22px 10px 22px;
             overflow-y: auto;
 
 
@@ -167,13 +140,45 @@ export default {
 
                 .section-info
                 {
-                    padding-bottom:30px;
+                    padding-bottom:60px;
                     border-bottom:2px solid @bleu_clair;
                 }
 
-                .avatar img
+                .section-plus
                 {
-                    width: 100%;
+                    h2
+                    {
+                        display: block;
+                        font-size: 20px;
+                        border-bottom: 2px solid @bleu_clair;
+                        width:100%;
+                        padding:25px 25px;
+                        display: block;
+                        color:white;
+                        text-decoration: none;
+                        cursor:pointer;
+                        margin:0px;
+
+                        i
+                        {
+                            padding-right: 10px;
+                        }
+
+                        &:hover
+                        {
+                            background-color: @bleu_clair;
+                        }    
+                    }
+                }
+
+                .avatar
+                {
+                    padding-left: 0px;
+
+                    img
+                    {
+                        width: 100%;
+                    }                    
                 }
 
                 .details
@@ -183,71 +188,18 @@ export default {
 
                     .pseudo
                     {
-                        font-size: 20px;
+                        font-size: 23px;
                         font-weight: bold;
                     }
 
                     .badge
                     {
-                        background-color: #d1d1d1;
-                        color:#222;
+                        background-color: #535362;
+                        color:white;
                         padding:5px 10px;
                     }
                 }
-
-                .cloud-tag, .pseudo-similaire
-                {
-                    .label
-                    {
-                        padding-top: 30px;
-                        color:white; 
-                        padding-bottom:10px; 
-                        margin:0px;
-                        font-size: 16px;
-                        font-weight: bold;                     
-                    }
-
-                    .item
-                    {
-                        color:#f1f1f1;
-                        text-align: left;
-                        font-size: 16px;
-                    }
-                }
-
-                .cloud-tag
-                {
-                    ul
-                    {
-                        list-style: none;
-                        margin: 0px;
-                        padding: 0px;
-
-                        li
-                        {
-                            display: inline-block;
-                            background-color: @bleu_clair;
-                            color:#f1f1f1;
-                            padding:5px;
-                            margin: 5px;
-                            font-size: 16px;
-                        }
-                    }
-                }
-
-                .pseudo-similaire
-                {
-                    .item
-                    {
-                        padding-bottom: 10px;
-
-                        img
-                        {
-                            width: 100%;
-                        }
-                    }
-                }
-            }       
+            }
         }
     }
 
@@ -256,7 +208,7 @@ export default {
         #pseudo-details
         {
             width:100%;
-            height: 100px;
+            height: 140px;
             position:fixed;
             top:auto;
             bottom:0px;
@@ -264,9 +216,9 @@ export default {
 
             .items
             {
-                padding:10px 20px 10px 20px;
+                padding:20px 20px 10px 20px;
                 width: 100%;
-                height:100px;
+                height:100%;
                 overflow-y: hidden;
 
                 .infos 
