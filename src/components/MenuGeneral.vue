@@ -8,7 +8,7 @@
             <div class="liste_menu">
                 <ul>
                     <li>
-                        <a href="">
+                        <a href=""  v-on:click="goMap()">
                             <i class="fa fa-map" aria-hidden="true"></i> La map
                         </a>
                     </li>
@@ -50,6 +50,9 @@ export default {
         ...mapGetters("menu", [
             "getDisplayMenu",
         ]),
+        goMap : function(){
+            this.$router.push({ name: 'index'});
+        },
         closeMenu: function(e) {
             this.setDisplayMenu(false);
         }
@@ -62,6 +65,7 @@ export default {
     @orange:#FF4000;
     @bleu_fonce:#004365;
     @bleu_tres_fonce:#023b5a;
+    @bleu_clair:#145f87;
 
     #menu-general
     {
@@ -125,7 +129,7 @@ export default {
                     {
                         display: block;
                         font-size: 20px;
-                        border-bottom: 2px solid @bleu_tres_fonce;
+                        border-bottom: 2px solid @bleu_clair;
 
                         a
                         {

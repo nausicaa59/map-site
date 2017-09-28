@@ -16,10 +16,12 @@
             <div class="item" v-for="proposition in this.searchProposition()">
                 <div class="row" v-on:click="selection(proposition.id)">
                     <div class="col-md-5 col-7 pseudo">
-                        {{proposition.id}} - {{proposition.pseudo}}
+                        {{proposition.pseudo}}
                     </div>
                     <div class="col-md-5 col-3 infos">
-                        <i class="fa fa-commenting-o" aria-hidden="true"></i>: {{proposition.nb_messages}}
+                        <span>
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i>: {{proposition.nb_messages}}
+                        </span>
                     </div>
                     <div class="col-md-2 col-2 next">
                         <i class="fa fa-angle-right" aria-hidden="true"></i>                            
@@ -32,6 +34,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import axios from 'axios'
 
 export default {
     name: 'barre-action-general',
@@ -46,7 +49,7 @@ export default {
             "setSearchCurrent",
             "setSearchProposition",
             "setSelection",
-            "setDisplaySelection"
+            "deleteSelection"
         ]),
         ...mapGetters("map", [
             "searchProposition",
@@ -58,11 +61,10 @@ export default {
         cleanSearch: function(e) {
             this.setSearchCurrent("");
             this.setSearchProposition([]);
-            this.setDisplaySelection(false);
+            this.deleteSelection()
         },
         selection: function(val) {
             this.setSelection(val);
-            this.setDisplaySelection(true);
         }
     },
     computed: {
@@ -168,12 +170,18 @@ export default {
             .item
             {
                 margin: 0px 0px 0px 0px;
-                padding: 15px;
+                padding: 0px;
                 background-color: white;
                 position:relative;
                 border-bottom: 1px solid #d1d1d1;
                 cursor:pointer;
                 color:#333; 
+
+                .row
+                {
+                    padding: 15px;
+                    margin:0px;
+                }
 
                 &:hover
                 {
@@ -255,6 +263,14 @@ export default {
                 border-left:0px solid #d1d1d1;
                 border-right:0px solid #d1d1d1;
                 border-top:2px solid #d1d1d1;
+
+                .item
+                {
+                    .infos span
+                    {
+                        display: none;
+                    }
+                }                
             }           
         }
     }

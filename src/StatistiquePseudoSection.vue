@@ -2,9 +2,14 @@
     <div id="statistique-pseudo-section">
         <barre-action-general></barre-action-general>
         <menu-general></menu-general>
-        <pseudo-details></pseudo-details>
+        <pseudo-details pageCurrent="stats"></pseudo-details>
         <div class="layout">
-            gggggg
+            <chartist  v-if="this.selection() != undefined"
+                ratio="ct-major-second"
+                type="Bar"
+                :data="chartData"
+                :options="chartOptions" >
+            </chartist>
         </div>
     </div>
 </template>
@@ -17,22 +22,31 @@ import PseudoDetails from './components/PseudoDetails'
 
 export default {
     name: 'statistique-pseudo-section',
+      data () {
+        return {
+            chartData: {
+                labels: ["A", "B", "C", "A", "B", "C"],
+                series:[[10, 3, 20, 14, 16, 5]]
+            },
+            chartOptions: {
+                lineSmooth: false,
+                width: "100%",
+                height: 300
+            }
+        }
+      },
     components: {
         BarreActionGeneral,
         MenuGeneral,
         PseudoDetails
     },
     methods : {
-        ...mapMutations("map", [
-            "setDisplaySelection"
-        ]),
         ...mapGetters("map", [
             "selection",
-            "displaySelection",
         ]),
     },
     mounted() {
-        this.setDisplaySelection(true);
+
     }
 }
 </script>
@@ -64,7 +78,7 @@ export default {
                 margin:0px 0px 0px 0px;
                 min-height: 2500px;
                 background-color: #F4F4F4;
-                padding:150px 30px;
+                padding:150px 5px 150px 5px;
             }
         }
     }

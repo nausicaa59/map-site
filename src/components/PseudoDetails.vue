@@ -1,28 +1,49 @@
 <template>
-    <div id="pseudo-details" v-if="this.displaySelection()">
-        <div class="items">
-            <div class="infos" v-if="this.selection() != undefined">
-                <div class="row section-info">
-                    <div class="col-md-4 col-3 avatar">
-                        <img :src="this.selection().img_lien">
-                    </div>
-                    <div class="col-md-8 col-9 details">
-                        <span class="pseudo">{{this.selection().pseudo}}</span>
-                        <br><span class="badge badge-primary">Msg : {{this.selection().nb_messages}}</span>
-                        <span class="badge badge-primary">Sujets : {{this.selection().nb_messages}}</span> 
-                        <br><br>Crée le : {{this.selection().date_inscription}}
-                    </div>
-                </div>
-                <div class="section-plus">
-                    <h2 v-on:click="goStat()"><i class="fa fa-area-chart" aria-hidden="true"></i>Voir les statistiques</h2>
-                </div>
-                <div class="section-plus">
-                    <h2><i class="fa fa-user" aria-hidden="true"></i>Voir les pseudos similaires</h2>
-                </div>
-                <div class="section-plus">
-                    <h2><i class="fa fa-random" aria-hidden="true"></i>Voir un pseudo au hasard</h2>
-                </div>
+    <div id="pseudo-details" v-if="this.selection() != undefined" v-bind:class="{ full: displayFullMobile }">
+        <div class="section-info">
+            <div class="pseudo">
+                {{this.selection().pseudo}}
             </div>
+            <div class="avatar">
+                <img :src="this.selection().img_lien">
+            </div>
+            <div class="details">
+                <ul>
+                     <li class="messages" title="Nombre de réponse créer par le pseudo">
+                        <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        {{this.selection().nb_messages}}
+                    </li>
+                    <li class="sujets" title="Nombre de sujets créer par le pseudo">
+                        <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                        {{this.selection().nb_sujet}}
+                    </li>                    
+                    <li class="inscription" title="Date d'inscription du pseudo">
+                        <i class="fa fa-hourglass-start" aria-hidden="true"></i>                        
+                        {{this.selection().date_inscription}}
+                    </li>
+                    <li class="status">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i></i>                        
+                        Le pseudo est actif
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <div class="viewMobile" v-on:click="fullMobile()">
+                <i class="fa fa-angle-up" aria-hidden="true" v-if="!displayFullMobile"></i>
+                <i class="fa fa-angle-down" aria-hidden="true" v-if="displayFullMobile"></i>
+            </div>
+        </div>
+        <div class="section-plus" v-if="pageCurrent != 'map'">
+            <h2 v-on:click="goMap()"><i class="fa fa-map" aria-hidden="true"></i>Retour à la map</h2>
+        </div>
+        <div class="section-plus"  v-if="pageCurrent != 'stats'">
+            <h2 v-on:click="goStat()"><i class="fa fa-area-chart" aria-hidden="true"></i>Statistiques</h2>
+        </div>
+        <div class="section-plus">
+            <h2><i class="fa fa-user" aria-hidden="true"></i>Pseudos similaires</h2>
+        </div>
+        <div class="section-plus">
+            <h2><i class="fa fa-random" aria-hidden="true"></i>Pseudo au hasard</h2>
         </div>
     </div>
 </template>
@@ -33,25 +54,28 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
     name: 'pseudo-details',
+    props: ["pageCurrent"],
     data() {
         return {
-            settings: {
-                maxScrollbarLength: 20,
-                theme: 'my-theme-name'
-            },
+            displayFullMobile : false
         }
     },
+    mounted() {
+        this.displayFullMobile = false;
+    },
     methods : {
-        ...mapMutations("map", [
-            "setDisplaySelection"
-        ]),
         ...mapGetters("map", [
             "selection",
-            "displaySelection",
         ]),
         goStat : function(){
             this.$router.push({ name: 'statpseudo'});
-        }
+        },
+        goMap : function(){
+            this.$router.push({ name: 'index'});
+        },
+        fullMobile : function(){
+            this.displayFullMobile = !this.displayFullMobile;
+        },
     },
 }
 </script>
@@ -75,130 +99,111 @@ export default {
         left:0px;
         z-index: 999;
         padding:0px;
-        overflow: hidden;
+        background-color: @bleu_fonce;
+        padding:170px 0px 10px 0px;
 
-        
-        .closebt
+        .section-info
         {
-            position:absolute;
-            right:20px;
-            top:10px;
-            text-align: right;
+            padding:50px 25px 70px 25px;
 
-            i
+            .viewMobile
+            {
+                display: none;
+            }
+
+            .pseudo
             {
                 color:white;
-                opacity: 0.75;
-                font-size: 30px;
-                cursor: pointer;
+                font-size: 28px;
+                font-weight: bold;
+                padding-bottom: 5px;
+            }
 
-                &:hover
+            .avatar
+            {
+                width: 30%;
+                float:left;
+
+                img
                 {
-                    opacity:1;
+                    width: 100%;
+                    border:2px solid @bleu_clair;
                 }
             }
-        }
 
-        .items
-        {
-            position:absolute;
-            width: 100%;
-            height: 100%;
-            background-color: @bleu_fonce;
-            padding:170px 22px 10px 22px;
-            overflow-y: auto;
-
-
-            &::-webkit-scrollbar-track
+            .details
             {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-                background-color: @bleu_tres_fonce;
-            }
+                width: 70%;
+                float:left;
+                padding-left: 20px;
+                border-top: 2px solid @bleu_clair;
+                padding-top: 10px;
 
-            &::-webkit-scrollbar
-            {
-                width: 10px;
-                background-color: @bleu_tres_fonce;
-            }
-
-            &::-webkit-scrollbar-thumb
-            {
-                background-color: @bleu_clair;
-                border: 2px solid @bleu_tres_fonce;
-            }
-
-
-
-            .row
-            {
-                margin:0px;
-            } 
-
-            .infos
-            {
-                padding-top: 30px;
-
-                .section-info
+                ul
                 {
-                    padding-bottom:60px;
-                    border-bottom:2px solid @bleu_clair;
-                }
+                    margin:0px;
+                    padding:0px;
+                    list-style: none;
 
-                .section-plus
-                {
-                    h2
+                    .pseudo
                     {
-                        display: block;
-                        font-size: 20px;
-                        border-bottom: 2px solid @bleu_clair;
-                        width:100%;
-                        padding:25px 25px;
-                        display: block;
+                        font-size: 24px;
+                        color: white;
+                        font-weight: bold;
+                    }
+
+                    .messages, .inscription, .sujets, .status
+                    {
+                        font-size: 22px;
                         color:white;
-                        text-decoration: none;
-                        cursor:pointer;
-                        margin:0px;
 
                         i
                         {
                             padding-right: 10px;
+                            font-weight: normal;
+                            color: #d2d2d2;
                         }
-
-                        &:hover
-                        {
-                            background-color: @bleu_clair;
-                        }    
                     }
-                }
 
-                .avatar
+                    .status, .status i
+                    {
+                        color:#09b509;
+                    }
+                }                    
+            }
+
+            .clear
+            {
+                clear: both;
+            }
+        }
+
+        .section-plus
+        {
+            border-bottom: 2px solid @bleu_clair;
+
+            h2
+            {
+                display: block;
+                font-size: 20px;
+                
+                width:100%;
+                padding:25px 25px;
+                display: block;
+                color:white;
+                text-decoration: none;
+                cursor:pointer;
+                margin:0px;
+
+                i
                 {
-                    padding-left: 0px;
-
-                    img
-                    {
-                        width: 100%;
-                    }                    
+                    padding-right: 10px;
                 }
 
-                .details
+                &:hover
                 {
-                    color:white;
-                    font-size: 16px;
-
-                    .pseudo
-                    {
-                        font-size: 23px;
-                        font-weight: bold;
-                    }
-
-                    .badge
-                    {
-                        background-color: #535362;
-                        color:white;
-                        padding:5px 10px;
-                    }
-                }
+                    background-color: @bleu_clair;
+                }    
             }
         }
     }
@@ -208,39 +213,91 @@ export default {
         #pseudo-details
         {
             width:100%;
-            height: 140px;
+            height: 170px;
             position:fixed;
             top:auto;
             bottom:0px;
-            
+            padding: 5px;
 
-            .items
+            &.full
             {
-                padding:20px 20px 10px 20px;
-                width: 100%;
+                position:fixed;
+                top:0px!important;
+                bottom:0px;
+                padding:0px;
                 height:100%;
-                overflow-y: hidden;
+                z-index:1600;
 
-                .infos 
+                .section-info
                 {
-                    padding-top:0px;
+                    padding:45px 25px 45px 25px;
 
-                    .avatar img
+                    .viewMobile
                     {
-                        padding-top:15px;                    }
+                        position:fixed;
+                        top:auto;
+                        bottom:20px!important;
+                        right: 0;
+                        left: 0;
+                        margin-left: auto;
+                        margin-right: auto;
+                        padding-top:4px;
+                    }
                 }
 
-
-                .liste_menu
+                .section-plus
                 {
-                    padding-top: 10px;
+                    h2
+                    {
+                        font-size: 16px;
+                    }
                 }
             }
 
-            .closebt
+            .section-info
             {
-                z-index: 1005;
+                padding:8px 8px 60px 8px;
+                position: relative;
+
+                .viewMobile
+                {
+                    display: block;
+                    position: absolute;
+                    top:-40px;
+                    right: 20px;
+                    font-size: 40px;
+                    color: white;
+                    z-index: 1600;
+                    padding:0px;
+                    background-color: @bleu_clair;
+                    border-radius: 100px;
+                    width:70px;
+                    height: 70px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .pseudo
+                {
+                    font-size: 18px;
+                }
+                
+                .avatar
+                {
+
+                }
+
+                .details
+                {
+                    ul
+                    {
+                        .messages, .inscription, .sujets, .status
+                        {
+                            font-size: 14px;
+                        }
+                    }                    
+                }
             }
-        } 
-    }
+        }
+     }
 </style>

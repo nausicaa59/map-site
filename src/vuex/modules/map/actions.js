@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export const searchByFragmentPseudo = ({ commit, getters }) => {
 	var hasard = Math.floor(Math.random() * 5) + 1;
 	var recherche = getters.searchCurrent;
@@ -11,6 +9,7 @@ export const searchByFragmentPseudo = ({ commit, getters }) => {
 			"id" : i,
 			"pseudo" : "Nausicaa" +i,
 			"nb_messages" : i*10000,
+			"nb_sujet" : i*5,
 			"pseudo" : "Nausicaa" + i,
 			"img_lien" : "https://unsplash.it/200/20" + i,
 			"nb_relation" : "Nausicaa" + i,

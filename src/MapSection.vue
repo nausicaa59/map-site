@@ -2,7 +2,7 @@
   <div id="map-section">
     <barre-action-general></barre-action-general>
     <menu-general></menu-general>
-    <pseudo-details></pseudo-details>
+    <pseudo-details pageCurrent="map"></pseudo-details>
     <map-forum></map-forum>
   </div>
 </template>
@@ -25,19 +25,10 @@ export default {
     PseudoDetails
   },
   methods : {
-      ...mapMutations("map", [
-          "setDisplaySelection"
-      ]),
-      ...mapGetters("map", [
-          "selection",
-          "displaySelection",
-      ]),
+
   },
   mounted() {
-    if(this.displaySelection() && this.selection() == undefined)
-    {
-      this.setDisplaySelection(false);
-    }    
+  
   }
 }
 

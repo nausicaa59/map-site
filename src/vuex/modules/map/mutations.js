@@ -15,7 +15,6 @@ export const mutations = {
 	    state.search.proposition = vals;
 	},
 	setSelection: (state, vals) => {
-		state.displaySelection = false;
 		for(var i=0; i<state.search.proposition.length; i++)
 		{
 	    	if(state.search.proposition[i].id == vals)
@@ -23,11 +22,9 @@ export const mutations = {
 	    		state.selection = state.search.proposition[i];
 	    	}
 		}
-
-		state.displaySelection = true;
 	    state.search.proposition = [];
 	},
-	setDisplaySelection: (state, vals) => {
-	    state.displaySelection = vals;
+	deleteSelection: (state) => {
+	    state.selection = undefined;
 	},
 }

@@ -15,6 +15,7 @@ Vue.config.productionTip = false
 
 // create router instance and define routes
 Vue.use(VueRouter);
+Vue.use(require('vue-chartist'))
 
 let router = new VueRouter({
   routes: [
