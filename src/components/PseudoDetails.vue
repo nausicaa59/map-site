@@ -39,8 +39,8 @@
         <div class="section-plus"  v-if="pageCurrent != 'stats'">
             <h2 v-on:click="goStat()"><i class="fa fa-area-chart" aria-hidden="true"></i>Statistiques</h2>
         </div>
-        <div class="section-plus">
-            <h2><i class="fa fa-user" aria-hidden="true"></i>Pseudos similaires</h2>
+        <div class="section-plus"  v-if="pageCurrent != 'similaire'">
+            <h2 v-on:click="goSimilaire()"><i class="fa fa-user" aria-hidden="true"></i>Pseudos similaires</h2>
         </div>
         <div class="section-plus">
             <h2><i class="fa fa-random" aria-hidden="true"></i>Pseudo au hasard</h2>
@@ -68,10 +68,13 @@ export default {
             "selection",
         ]),
         goStat : function(){
-            this.$router.push({ name: 'statpseudo'});
+            this.$router.push({ name: 'pseudo-stats'});
         },
         goMap : function(){
             this.$router.push({ name: 'index'});
+        },
+        goSimilaire: function(){
+            this.$router.push({ name: 'pseudo-similaire'});
         },
         fullMobile : function(){
             this.displayFullMobile = !this.displayFullMobile;
@@ -213,7 +216,7 @@ export default {
         #pseudo-details
         {
             width:100%;
-            height: 170px;
+            height: 150px;
             position:fixed;
             top:auto;
             bottom:0px;

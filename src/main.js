@@ -3,11 +3,12 @@
 import Vue from 'vue'
 import store from './vuex/store'
 import VueRouter from 'vue-router';
+import VueCharts from 'vue-charts';
 
 import App from './App'
 import MapSection from './MapSection'
 import StatistiquePseudoSection from './StatistiquePseudoSection'
-
+import PseudoSimilaireSection from './PseudoSimilaireSection'
 
 
 Vue.config.productionTip = false
@@ -15,12 +16,16 @@ Vue.config.productionTip = false
 
 // create router instance and define routes
 Vue.use(VueRouter);
-Vue.use(require('vue-chartist'))
+Vue.use(VueCharts);
+
+
+
 
 let router = new VueRouter({
   routes: [
     { name: 'index', path: '/', component: MapSection },
-    { name: 'statpseudo', path: '/statpseudo/', component: StatistiquePseudoSection}
+    { name: 'pseudo-stats', path: '/pseudo-stats/', component: StatistiquePseudoSection},
+    { name: 'pseudo-similaire', path: '/pseudo-similaire/', component: PseudoSimilaireSection}
   ],
   hashbang: false,
   mode: 'history',
