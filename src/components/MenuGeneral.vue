@@ -8,27 +8,22 @@
             <div class="liste_menu">
                 <ul>
                     <li>
-                        <a href=""  v-on:click="goMap()">
+                        <a href="" v-on:click="goMap()">
                             <i class="fa fa-map" aria-hidden="true"></i> La map
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" v-on:click="goStat()">
                             <i class="fa fa-area-chart" aria-hidden="true"></i> Statistiques
                         </a>
                     </li>
                     <li>
-                        <a href="">
-                            <i class="fa fa-file-text" aria-hidden="true"></i> Analyse textuelle
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
+                        <a href="" v-on:click="goTempsReel()">
                             <i class="fa fa-clock-o" aria-hidden="true"></i> Temps réel
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" v-on:click="goApropos()">
                             <i class="fa fa-info-circle" aria-hidden="true"></i> A propos
                         </a>
                     </li>
@@ -52,6 +47,15 @@ export default {
         ]),
         goMap : function(){
             this.$router.push({ name: 'index'});
+        },
+        goStat : function(){
+            this.$router.push({ name: 'pseudo-stats'});
+        },
+        goTempsReel : function(){
+            this.$router.push({ name: 'temps-reel'});
+        },
+        goApropos : function(){
+            this.$router.push({ name: 'a-propos'});
         },
         closeMenu: function(e) {
             this.setDisplayMenu(false);

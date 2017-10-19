@@ -9,40 +9,31 @@
                 <div class="stat_content">
                     <vue-chart
                         chart-type="BarChart"
-                        :columns="columns"
-                        :rows="this.selection().sujetByYear"
-                        :options="options"
+                        :columns="columns.sujets"
+                        :rows="this.selection().SujetByYear"
+                        :options="optionsBarre"
                     ></vue-chart>
                 </div>
             </div>
             <div class="stats_graph" v-if="this.selection() != undefined">
-                <h3>Nb. sujets / 12 derniers mois d'activité</h3>
+                <h3>Nb. sujets / 12 derniers mois</h3>
                 <div class="stat_content">
                     <vue-chart
                         chart-type="BarChart"
-                        :columns="columns"
-                        :rows="this.selection().sujetByLastMouth"
-                        :options="options"
+                        :columns="columns.sujets"
+                        :rows="this.selection().SujetByLastMouth"
+                        :options="optionsBarre"
                     ></vue-chart>
                 </div>
             </div>
             <div class="stats_tabl" v-if="this.selection() != undefined">
-                <h3>Analyse lexicales des sujets créer</h3>
-                <div class="stat_content">
-                    <table class="table">
-                        <thead>
-                            <th>Mots</th>
-                            <th>Fréquence</th>
-                            <th>%</th>
-                        </thead>
-                        <tbody>
-                            <tr v-for="occurence in this.selection().analyseTextuel">
-                                <td>{{occurence.name}}</td>
-                                <td>{{occurence.nb}}</td>
-                                <td>{{occurence.nb}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h3>Mots les plus souvent employer dans les titres de sujets (top 30)</h3>
+                <div class="stat_content listeWord">
+                    <ul>
+                        <li v-for="occurence in this.selection().AnalyseTextuel">
+                            <div>{{ occurence.Word }} <span>({{ occurence.Nb }})</span></div>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="stats_tabl" v-if="this.selection() != undefined">
@@ -55,15 +46,82 @@
                             <th>Nb réponse</th>
                         </thead>
                         <tbody>
-                            <tr v-for="sujet in this.selection().sujets">
-                                <td>{{sujet.date}}</td>
-                                <td class="sujetTitle"><a href="">{{sujet.title}}</a></td>
-                                <td>15</td>
+                            <tr v-for="sujet in this.selection().Sujets">
+                                <td>{{sujet.Initialised_at}}</td>
+                                <td class="sujetTitle"><a :href="sujet.Url" target="_blank">{{sujet.Title}}</a></td>
+                                <td>{{sujet.Nb_reponses}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="stats_graph chiffrecle" v-if="this.selection() == undefined  && this.stats() != undefined">
+                <div class="row">
+                    <div class="col-md-3 col-12 chiffre">
+                        <span>{{this.stats().NbPseudo}}</span><br>Pseudos
+                    </div>
+                    <div class="col-md-3 col-12 chiffre">
+                        <span>{{this.stats().NbSujet}}</span><br>Sujets créer
+                    </div>
+                    <div class="col-md-3 col-12 chiffre">
+                        <span>{{this.stats().NbReponse}}</span><br>Reponses
+                    </div>
+                    <div class="col-md-3 col-12 chiffre">
+                        <span>{{this.stats().NbRepSujet}}</span><br>Réponses / sujet
+                    </div>
+                </div>
+            </div>
+            <div class="stats_graph" v-if="this.selection() == undefined  && this.stats() != undefined">
+                <h3>Nombre de réponse par années</h3>
+                <div class="stat_content">
+                    <vue-chart
+                        chart-type="LineChart"
+                        :columns="columns.reponses"
+                        :rows="this.stats().ReponseByYear"
+                        :options="optionsLine"
+                    ></vue-chart>
+                </div>
+            </div>
+            <div class="stats_graph" v-if="this.selection() == undefined  && this.stats() != undefined">
+                <h3>Nombre de réponse pour les 12 derniers mois</h3>
+                <div class="stat_content">
+                    <vue-chart
+                        chart-type="LineChart"
+                        :columns="columns.reponses"
+                        :rows="this.stats().ReponseByLastMouth"
+                        :options="optionsLine"
+                    ></vue-chart>
+                </div>
+            </div>
+            <div class="stats_tabl" v-if="this.selection() == undefined && this.stats() != undefined">
+                <h3>Mots les plus souvent employer dans les titres de sujets (TOP100)</h3>
+                <div class="stat_content listeWord">
+                    <ul>
+                        <li v-for="occurence in this.stats().AnalyseTextuel">
+                            <div>{{ occurence.Word }} <span>({{ occurence.Nb }})</span></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stats_tabl" v-if="this.selection() == undefined && this.stats() != undefined">
+                <h3>Liste des 30 sujets les plus populaires</h3>
+                <div class="stat_content">
+                    <table class="table">
+                        <thead>
+                            <th>Date</th>
+                            <th>Sujets</th>
+                            <th>Nb réponse</th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="sujet in this.stats().Sujets">
+                                <td>{{sujet.Initialised_at}}</td>
+                                <td class="sujetTitle"><a :href="sujet.Url" target="_blank">{{sujet.Title}}</a></td>
+                                <td>{{sujet.Nb_reponses}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>          
         </div>
     </div>
 </template>
@@ -78,16 +136,47 @@ export default {
     name: 'statistique-pseudo-section',
       data () {
         return {
-            columns: [
-                {'type': 'string','label': 'Year'}, 
-                {'type': 'number','label': 'Topics créer'}
+            columns: {
+                sujets : [
+                    {'type': 'string','label': 'Year'}, 
+                    {'type': 'number','label': 'Sujets crées'}
+                ],
+                reponses : [
+                    {'type': 'string','label': 'Year'}, 
+                    {'type': 'number','label': 'Nombre de réponses'}
+                ]
+            },
+            series: [
+                ["2017",125000],
+                ["2016",105000],
+                ["2015",95000],
+                ["2014",85000],
+                ["2013",55000],
+                ["2012",45000]
             ],
-            options: {
+            optionsLine: {
                 width: "100%", height: 500,
-                chartArea: {width: '90%', height: '75%'},
+                chartArea: {width: '80%', height: '60%'},
                 legend: {position: 'top'},
                 titlePosition: 'in', axisTitlesPosition: 'in',
-                hAxis: {showTextEvery: '1', textPosition: 'out'}, 
+                hAxis: {
+                    showTextEvery: '1', 
+                    textPosition: 'out', 
+                    slantedTextAngle: 90, 
+                    direction: -1, 
+                    slantedText: true
+                }, 
+                vAxis: {textPosition: 'out'}
+            },
+            optionsBarre: {
+                width: "100%", height: 500,
+                chartArea: {width: '80%', height: '75%'},
+                legend: {position: 'top'},
+                titlePosition: 'in', axisTitlesPosition: 'in',
+                hAxis: {
+                    showTextEvery: '1', 
+                    textPosition: 'out'
+                }, 
                 vAxis: {textPosition: 'out'}
             }
         }
@@ -100,6 +189,7 @@ export default {
     methods : {
         ...mapGetters("map", [
             "selection",
+            "stats"
         ]),
     },
     mounted() {
@@ -124,7 +214,6 @@ export default {
         {
             margin:0px 0px 0px 500px;
             background-color: #F4F4F4;
-            min-height: 500px;
             padding:30px 80px;
 
 
@@ -133,6 +222,32 @@ export default {
                 margin-bottom: 100px;
                 background-color: white;
                 border-bottom: 2px solid #d1d1d1;
+
+                &.chiffrecle 
+                {
+                    text-align: center;
+
+                    .row
+                    {
+                        margin:0px;
+                        
+                        .chiffre
+                        {
+                            padding:25px;
+                            background-color:@orange;
+                            color:white;
+
+                            &:nth-child(2n){
+                                background-color: @bleu_clair;
+                            }
+
+                            span
+                            {
+                                font-size: 28px;
+                            }
+                        }
+                    }
+                }
 
                 .stat_content
                 {
@@ -166,6 +281,33 @@ export default {
 
             .stats_tabl
             {
+                .listeWord
+                {
+                    ul
+                    {
+                        li
+                        {
+                            display: inline-block;
+                            margin-right :20px;
+                            margin-bottom: 20px;
+
+                            div
+                            {
+                                padding:5px 10px;
+                                background-color: #f1f1f1;
+                                font-size: 20px;
+                                text-transform: uppercase;
+                                color:black;
+
+                                span
+                                {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 table
                 {
                     width: 100%;                    
@@ -196,7 +338,7 @@ export default {
         }
     }
 
-    @media (min-width: 0px) and (max-width: 750px) {
+    @media (min-width: 0px) and (max-width: 1030px) {
         #statistique-pseudo-section
         {
             .layout
@@ -208,6 +350,32 @@ export default {
 
                 .stats_tabl
                 {
+                    .listeWord
+                    {
+                        ul
+                        {
+                            margin:0px;
+                            padding:0px 0px 0px 15px;
+
+                            li
+                            {
+                                margin-right :10px;
+                                margin-bottom: 10px;
+
+                                div
+                                {
+                                    padding:5px 10px;
+                                    font-size: 14px;
+
+                                    span
+                                    {
+                                        font-size: 10px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     table
                     {
                         width: 100%;

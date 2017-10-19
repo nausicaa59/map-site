@@ -3,13 +3,34 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+
 export default {
   name: 'map-forum',
   data () {
     return {
       map: null,
-      imageMap: null
+      imageMap: null,
     }
+  },
+  methods : {
+      ...mapGetters("map", [
+          "mapX",
+          "mapY",
+          "mapZoom"
+      ]),
+  },
+  computed: {
+      centreX: {
+          get () {
+              return this.mapX();
+          }
+      },
+      centreY: {
+          get () {
+              return this.mapY();
+          }
+      }
   },
   mounted() {
     var EuclideanProjection = function () {
@@ -43,8 +64,8 @@ export default {
 
     var imageOptions = {
         getTileUrl: function (coord, zoom) {
-          console.log(zoom);
-            return "http://map.dev/build/assets/" + "output/" + zoom + '/' + coord.y + '/' + coord.y + "-" + coord.x + ".png";
+            //return "http://imgmap.dev/" + zoom + '/' + coord.y + '/' + coord.y + "-" + coord.x + ".png";
+            return "http://media.webcartes.fr/" + zoom + '/' + coord.y + '/' + coord.y + "-" + coord.x + ".png";
         },
         tileSize: new google.maps.Size(256, 256),
         isPng: true
@@ -54,7 +75,7 @@ export default {
     this.imageMap.projection = new EuclideanProjection();
     this.imageMap.name = "webmap";
     this.imageMap.minZoom = 0;
-    this.imageMap.maxZoom = 14;
+    this.imageMap.maxZoom = 7;
 
    var mapOptions = {
         zoom: 0,
@@ -70,12 +91,17 @@ export default {
     this.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     this.map.mapTypes.set('webmap', this.imageMap);
     this.map.setMapTypeId('webmap');
-    this.map.setCenter(this.imageMap.projection.fromPointToLatLng({x:1001,y:805.5}));
+    this.map.setZoom(this.mapZoom());
+    this.map.setCenter(this.imageMap.projection.fromPointToLatLng({x:this.mapX(),y:this.mapY()}));
   },
   watch : {
-    center : function (value) {
-      var val = parseInt(value)
-      this.map.setCenter(this.imageMap.projection.fromPointToLatLng({x:val,y:805.5}));
+    centreX : function (value) {
+      this.map.setCenter(this.imageMap.projection.fromPointToLatLng({x:this.mapX(),y:this.mapY()}));
+      this.map.setZoom(this.mapZoom());
+    },
+    centreY : function (value) {
+      this.map.setCenter(this.imageMap.projection.fromPointToLatLng({x:this.mapX(),y:this.mapY()}));
+      this.map.setZoom(this.mapZoom());
     }
   }
 }

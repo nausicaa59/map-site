@@ -12,9 +12,12 @@
               <i class="fa fa-times" aria-hidden="true"></i>
           </div>
         </div>
+        <div class="alert alert-danger errorAjax" v-if="errorAjax() == true">
+          {{errorLabel()}}
+        </div>
         <div class="layoutpseudo" v-if="this.searchProposition().length > 0">
             <div class="item" v-for="proposition in this.searchProposition()">
-                <div class="row" v-on:click="selection(proposition.id)">
+                <div class="row" v-on:click="selection(proposition.pseudo)">
                     <div class="col-md-5 col-7 pseudo">
                         {{proposition.pseudo}}
                     </div>
@@ -34,13 +37,13 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
-import axios from 'axios'
 
 export default {
     name: 'barre-action-general',
     methods : {
         ...mapActions("map",[
-            "searchByFragmentPseudo"
+            "searchByFragmentPseudo",
+            "searchSelection"
         ]),
         ...mapMutations("menu", [
             "setDisplayMenu"            
@@ -53,7 +56,9 @@ export default {
         ]),
         ...mapGetters("map", [
             "searchProposition",
-            "searchCurrent"
+            "searchCurrent",
+            "errorAjax",
+            "errorLabel"
         ]),
         openMenu: function(e) {
             this.setDisplayMenu(true);
@@ -64,7 +69,8 @@ export default {
             this.deleteSelection()
         },
         selection: function(val) {
-            this.setSelection(val);
+            console.log(val);
+            this.searchSelection(val);
         }
     },
     computed: {
@@ -95,6 +101,11 @@ export default {
         left:20px;
         z-index: 1000;
         padding:0px;
+
+        .errorAjax
+        {
+            margin-top:15px;
+        }
 
         .titre
         {
@@ -208,7 +219,7 @@ export default {
     }
 
 
-    @media (min-width: 0px) and (max-width: 750px) {
+    @media (min-width: 0px) and (max-width: 1030px) {
         header
         {
             width:100%;

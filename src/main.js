@@ -9,7 +9,8 @@ import App from './App'
 import MapSection from './MapSection'
 import StatistiquePseudoSection from './StatistiquePseudoSection'
 import PseudoSimilaireSection from './PseudoSimilaireSection'
-
+import TempsReel from './TempsReel'
+import Apropos from './Apropos'
 
 Vue.config.productionTip = false
 
@@ -25,7 +26,9 @@ let router = new VueRouter({
   routes: [
     { name: 'index', path: '/', component: MapSection },
     { name: 'pseudo-stats', path: '/pseudo-stats/', component: StatistiquePseudoSection},
-    { name: 'pseudo-similaire', path: '/pseudo-similaire/', component: PseudoSimilaireSection}
+    { name: 'pseudo-similaire', path: '/pseudo-similaire/', component: PseudoSimilaireSection},
+    { name: 'temps-reel', path: '/temps-reel/', component: TempsReel},
+    { name: 'a-propos', path: '/a-propos/', component: Apropos}
   ],
   hashbang: false,
   mode: 'history',

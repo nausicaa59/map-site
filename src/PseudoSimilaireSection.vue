@@ -6,27 +6,74 @@
         <div class="layout">
             <div class="contenair_pseudos" v-if="this.selection() != undefined">
                 <div class="row">
-                    <div class="col-md-4 col-12 proposition" v-for="pseudoItem in this.selection().similaires">
-                        <div class="pseudoName">{{ pseudoItem.pseudo }}</div>
+                    <div class="col-md-4 col-12 proposition" v-for="pseudoItem in this.selection().Similaires" v-on:click="select(pseudoItem.Pseudo)">
+                        <div class="pseudoName">{{ pseudoItem.Pseudo }}</div>
                         <div class="row">
                             <div class="col-md-4 col-4 infoAvatar">
-                                <img :src="pseudoItem.img_lien">
+                                <img :src="pseudoItem.Img_lien">
                             </div>
                             <div class="col-md-8 col-8">
                                 <div class="infoComplentaire">
                                     <div class="messages" title="Nombre de réponse créer par le pseudo">
                                         <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                                        {{pseudoItem.nb_sujet}}
+                                        {{pseudoItem.Nb_messages}}
                                     </div>
-                                    <div class="status" title="">
-                                        <i class="fa fa-check-circle" aria-hidden="true"></i></i>                        
-                                        Pseudo actif
+                                    <div class="status" v-if="pseudoItem.Banni == 0">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i>                        
+                                        Le pseudo est actif
                                     </div>
-                                    <div class="tauxSimilitude" title="">
-                                        <span v-bind:class="rangeOfSimilitude(pseudoItem.pourc)">
-                                            Similaire à {{pseudoItem.pourc}}%
-                                        </span>
+                                    <div class="status ban" v-if="pseudoItem.Banni == 1">
+                                        <i class="fa fa-ban" aria-hidden="true"></i>                        
+                                        Le pseudo est banni
                                     </div>                                   
+                                    <div class="tauxSimilitude" title="">
+                                        <span v-bind:class="rangeOfSimilitude(pseudoItem.Pourc)">
+                                            Similaire à {{pseudoItem.Pourc}}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nofound" v-if="this.selection().Similaires.length == 0">
+                    <div class="notification">
+                        Oups !
+                        <br>Les pseudos similaires n'ont pas encore été calculés pour ce pseudo
+                    </div>
+                    <div class="workprogress">
+                        <i class="fa fa-meh-o" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenair_pseudos top30" v-if="(this.selection() == undefined && this.stats() != undefined) || (this.selection() != undefined && this.selection().Similaires.length == 0)">
+                <div class="row">
+                    <div class="col-12 eliteTitle">
+                        <h2>L'élite de la nation (top 30)</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-12 proposition" v-for="pseudoItem in this.stats().Auteurs" v-on:click="select(pseudoItem.Pseudo)">
+                        <div class="pseudoName">{{ pseudoItem.Pseudo }}</div>
+                        <div class="row">
+                            <div class="col-md-4 col-4 infoAvatar">
+                                <img :src="pseudoItem.Img_lien">
+                            </div>
+                            <div class="col-md-8 col-8">
+                                <div class="infoComplentaire">
+                                    <div class="messages" title="Nombre de réponse créer par le pseudo">
+                                        <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                        {{pseudoItem.Nb_messages}}
+                                    </div>
+                                    <div class="status" v-if="pseudoItem.Banni == 0">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i>                        
+                                        Le pseudo est actif
+                                    </div>
+                                    <div class="status ban" v-if="pseudoItem.Banni == 1">
+                                        <i class="fa fa-ban" aria-hidden="true"></i>                        
+                                        Le pseudo est banni
+                                    </div>                                  
                                 </div>
                             </div>
                         </div>
@@ -57,6 +104,10 @@ export default {
     methods : {
         ...mapGetters("map", [
             "selection",
+            "stats",
+        ]),
+        ...mapActions("map",[
+            "searchSelection"
         ]),
         rangeOfSimilitude: function(pourc) {
             return {
@@ -64,6 +115,9 @@ export default {
               'medium': (pourc < 80) && (pourc >= 50),
               'low': (pourc < 50)
             }
+        },
+        select: function(val) {
+            this.searchSelection(val);
         }
     },
     mounted() {
@@ -90,6 +144,38 @@ export default {
 
             .contenair_pseudos
             {
+                &.top30
+                {
+                    h2
+                    {
+                        padding-top : 60px;
+                        padding-bottom: 60px;
+                        text-align: center;
+                    }
+                }
+
+                .nofound
+                {
+                    min-height: 100%;
+                    padding-top: 50px;
+                    padding-bottom: 100px;
+
+                    .notification
+                    {
+                        font-size: 30px;
+                        text-align: center;
+                        color:#d9534f;
+                    }
+
+                    .workprogress
+                    {
+                        width: 100%;
+                        text-align: center;
+                        font-size: 190px;
+                        color:#d9534f;
+                    }
+                }
+
                 .proposition
                 {
                     margin-bottom: 50px;
@@ -139,13 +225,18 @@ export default {
                                 color:#d1d1d1;
                             }
                         }
+
+                        .status
+                        {
+
+                        }
                     }
                 }
             }
         }
     }
 
-    @media (min-width: 0px) and (max-width: 750px) {
+    @media (min-width: 0px) and (max-width: 1030px) {
         #pseudo-similaire-section
         {
             .layout
@@ -161,7 +252,24 @@ export default {
                     {
                         margin:0px;
                     }
-                    
+
+                    .nofound
+                    {
+                        .notification
+                        {
+                            font-size: 18px;
+                            text-align: center;
+                            color:#d9534f;
+                        }
+
+                        .workprogress
+                        {
+                            width: 100%;
+                            text-align: center;
+                            font-size: 90px;
+                            color:#d9534f;
+                        }
+                    }
 
                     .proposition
                     {

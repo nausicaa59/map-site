@@ -2,28 +2,32 @@
     <div id="pseudo-details" v-if="this.selection() != undefined" v-bind:class="{ full: displayFullMobile }">
         <div class="section-info">
             <div class="pseudo">
-                {{this.selection().pseudo}}
+                {{this.selection().Infos.Pseudo}}
             </div>
             <div class="avatar">
-                <img :src="this.selection().img_lien">
+                <img :src="this.selection().Infos.Img_lien">
             </div>
             <div class="details">
                 <ul>
                      <li class="messages" title="Nombre de réponse créer par le pseudo">
                         <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                        {{this.selection().nb_messages}}
+                        {{this.selection().Infos.Nb_messages}}
                     </li>
                     <li class="sujets" title="Nombre de sujets créer par le pseudo">
                         <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                        {{this.selection().nb_sujet}}
+                        {{this.selection().Sujets.length}}
                     </li>                    
                     <li class="inscription" title="Date d'inscription du pseudo">
                         <i class="fa fa-hourglass-start" aria-hidden="true"></i>                        
-                        {{this.selection().date_inscription}}
+                        {{this.selection().Infos.Date_inscription}}
                     </li>
-                    <li class="status">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i></i>                        
+                    <li class="status" v-if="this.selection().Infos.Banni == 0">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>                        
                         Le pseudo est actif
+                    </li>
+                    <li class="status ban" v-if="this.selection().Infos.Banni == 1">
+                        <i class="fa fa-ban" aria-hidden="true"></i>                        
+                        Le pseudo est banni
                     </li>
                 </ul>
             </div>
@@ -42,7 +46,7 @@
         <div class="section-plus"  v-if="pageCurrent != 'similaire'">
             <h2 v-on:click="goSimilaire()"><i class="fa fa-user" aria-hidden="true"></i>Pseudos similaires</h2>
         </div>
-        <div class="section-plus">
+        <div class="section-plus" v-on:click="random()">
             <h2><i class="fa fa-random" aria-hidden="true"></i>Pseudo au hasard</h2>
         </div>
     </div>
@@ -67,6 +71,9 @@ export default {
         ...mapGetters("map", [
             "selection",
         ]),
+        ...mapActions("map",[
+            "searchRandom"
+        ]),
         goStat : function(){
             this.$router.push({ name: 'pseudo-stats'});
         },
@@ -78,6 +85,10 @@ export default {
         },
         fullMobile : function(){
             this.displayFullMobile = !this.displayFullMobile;
+        },
+        random : function(){
+            console.log("random demander !");
+            this.searchRandom();
         },
     },
 }
@@ -172,6 +183,11 @@ export default {
                     {
                         color:#09b509;
                     }
+
+                    .status.ban, .status.ban i
+                    {
+                        color:red;
+                    }
                 }                    
             }
 
@@ -212,7 +228,7 @@ export default {
     }
 
 
-    @media (min-width: 0px) and (max-width: 750px) {
+    @media (min-width: 0px) and (max-width: 1030px) {
         #pseudo-details
         {
             width:100%;
@@ -303,4 +319,43 @@ export default {
             }
         }
      }
+
+    @media (min-width: 721px) and (max-width: 1030px) {
+        #pseudo-details
+        {
+            height: 190px;
+
+            .section-info
+            {
+
+                .pseudo
+                {
+                    font-size: 18px;
+                }
+                
+                .avatar
+                {
+                    width:120px;
+                    height: 120px;
+                    overflow: hidden;
+
+                    img
+                    {
+                        width: 120px;
+                    }                    
+                }
+
+                .details
+                {
+                    ul
+                    {
+                        .messages, .inscription, .sujets, .status
+                        {
+                            font-size: 14px;
+                        }
+                    }                    
+                }
+            }
+        }
+    }
 </style>

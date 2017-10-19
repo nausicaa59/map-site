@@ -5,5 +5,8 @@ export default {
 	searchCurrent 		:	state => state.search.current,
 	searchProposition	:	state => state.search.proposition,
 	selection			:	state => state.selection,
+	stats				:	state => state.stats,
 	displaySelection	:	state => state.displaySelection,
+	errorAjax			:	state => state.errorAjax,
+	errorLabel			:	state => state.errorLabel,
 }

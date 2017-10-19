@@ -8,15 +8,18 @@ import {mutations} from './mutations';
 
 const state = {
   	map : {
-		zoom: "",
-		x: 0,
-		y: 0	
+		zoom: 0,
+		x: 1001,
+		y: 805.5	
   	},
   	search : {
   		current : "",
   		proposition : []
   	},
   	selection : undefined,
+  	stats : undefined,
+  	errorAjax : false,
+  	errorLabel : ""
 }
 
 export default {
